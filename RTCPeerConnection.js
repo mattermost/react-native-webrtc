@@ -88,7 +88,6 @@ export default class RTCPeerConnection extends EventTarget(PEER_CONNECTION_EVENT
   _dataChannelIds: Set = new Set();
 
   constructor(configuration) {
-    console.log('<><> PeerConnection constructor (js)');
     super();
     this._peerConnectionId = nextPeerConnectionId++;
     WebRTCModule.peerConnectionInit(configuration, this._peerConnectionId);
@@ -303,7 +302,7 @@ export default class RTCPeerConnection extends EventTarget(PEER_CONNECTION_EVENT
         this._getTransceiver(transceiver);
       }
       // Restore Order
-      this._transceivers = 
+      this._transceivers =
         this._transceivers.map((t, i) => this._transceivers.find((t2) => t2.id === state.transceivers[i].id));
     }
   }

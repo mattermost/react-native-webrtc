@@ -264,8 +264,11 @@ export default class RTCPeerConnection extends EventTarget(PEER_CONNECTION_EVENT
     return this._transceivers.slice();
   }
 
-  close() {
-    WebRTCModule.peerConnectionClose(this._peerConnectionId);
+  close(cb?: () => void) {
+    if (!cb) {
+      cb = () => null;
+    }
+    WebRTCModule.peerConnectionClose(this._peerConnectionId, cb);
   }
 
   _getTrack(streamReactTag, trackId): MediaStreamTrack {

@@ -85,8 +85,6 @@
 RCT_EXPORT_METHOD(peerConnectionInit:(RTCConfiguration*)configuration
                             objectID:(nonnull NSNumber *)objectID)
 {
-  NSLog(@"<><> peerConnectionInit");
-
   NSDictionary *optionalConstraints = @{ @"DtlsSrtpKeyAgreement" : @"true" };
   RTCMediaConstraints* constraints =
       [[RTCMediaConstraints alloc] initWithMandatoryConstraints:nil
@@ -151,7 +149,7 @@ RCT_EXPORT_METHOD(peerConnectionAddTransceiver:(nonnull NSNumber *)objectID
     if (!peerConnection) {
       return;
     }
-    
+
     RTCRtpTransceiverInit *init = [RTCRtpTransceiverInit new];
     init.direction = RTCRtpTransceiverDirectionSendRecv;
     if ([options objectForKey:@"init"] != nil) {
@@ -163,7 +161,7 @@ RCT_EXPORT_METHOD(peerConnectionAddTransceiver:(nonnull NSNumber *)objectID
             init.streamIds = [initOpt objectForKey: @"streamIds"];
         }
     }
-    
+
     RTCRtpTransceiver *transceiver;
     if ([options objectForKey:@"type"] != nil) {
         NSString* type = [options objectForKey:@"type"];
@@ -383,7 +381,8 @@ RCT_EXPORT_METHOD(peerConnectionAddICECandidate:(RTCIceCandidate*)candidate obje
   callback(@[@true]);
 }
 
-RCT_EXPORT_METHOD(peerConnectionClose:(nonnull NSNumber *)objectID)
+RCT_EXPORT_METHOD(peerConnectionClose:(nonnull NSNumber *)objectID
+                  myCallback:(RCTResponseSenderBlock)callback)
 {
   RTCPeerConnection *peerConnection = self.peerConnections[objectID];
   if (!peerConnection) {
@@ -413,6 +412,9 @@ RCT_EXPORT_METHOD(peerConnectionClose:(nonnull NSNumber *)objectID)
     // RTCPeerConnection and the latter will close the former.
   }
   [dataChannels removeAllObjects];
+
+  // Signal we're done
+  callback(@[[NSNull null]]);
 }
 
 RCT_EXPORT_METHOD(peerConnectionGetStats:(nonnull NSString *)trackID
@@ -589,7 +591,7 @@ RCT_EXPORT_METHOD(getTrackVolumes:(RCTResponseSenderBlock)callback)
     } else if ([direction isEqualToString:@"inactive"]) {
         return RTCRtpTransceiverDirectionInactive;
     }
-    
+
     return RTCRtpTransceiverDirectionSendRecv;
 }
 

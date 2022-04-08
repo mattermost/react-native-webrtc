@@ -88,6 +88,7 @@ export default class RTCPeerConnection extends EventTarget(PEER_CONNECTION_EVENT
   _dataChannelIds: Set = new Set();
 
   constructor(configuration) {
+    console.log('<><> PeerConnection constructor (js)');
     super();
     this._peerConnectionId = nextPeerConnectionId++;
     WebRTCModule.peerConnectionInit(configuration, this._peerConnectionId);

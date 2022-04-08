@@ -85,6 +85,8 @@
 RCT_EXPORT_METHOD(peerConnectionInit:(RTCConfiguration*)configuration
                             objectID:(nonnull NSNumber *)objectID)
 {
+  NSLog(@"<><> peerConnectionInit");
+
   NSDictionary *optionalConstraints = @{ @"DtlsSrtpKeyAgreement" : @"true" };
   RTCMediaConstraints* constraints =
       [[RTCMediaConstraints alloc] initWithMandatoryConstraints:nil

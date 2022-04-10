@@ -1016,6 +1016,8 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
     public void peerConnectionClose(int id, Callback cb) {
         ThreadUtils.runOnExecutor(() -> {
             peerConnectionCloseAsync(id);
+
+            // Signal we're done
             cb.invoke();
         });
     }

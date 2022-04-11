@@ -263,8 +263,11 @@ export default class RTCPeerConnection extends EventTarget(PEER_CONNECTION_EVENT
     return this._transceivers.slice();
   }
 
-  close() {
-    WebRTCModule.peerConnectionClose(this._peerConnectionId);
+  close(cb?: () => void) {
+    if (!cb) {
+      cb = () => null;
+    }
+    WebRTCModule.peerConnectionClose(this._peerConnectionId, cb);
   }
 
   _getTrack(streamReactTag, trackId): MediaStreamTrack {
@@ -299,7 +302,7 @@ export default class RTCPeerConnection extends EventTarget(PEER_CONNECTION_EVENT
         this._getTransceiver(transceiver);
       }
       // Restore Order
-      this._transceivers = 
+      this._transceivers =
         this._transceivers.map((t, i) => this._transceivers.find((t2) => t2.id === state.transceivers[i].id));
     }
   }

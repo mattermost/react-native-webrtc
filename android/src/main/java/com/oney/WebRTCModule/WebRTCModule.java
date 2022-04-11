@@ -1013,8 +1013,13 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void peerConnectionClose(int id) {
-        ThreadUtils.runOnExecutor(() -> peerConnectionCloseAsync(id));
+    public void peerConnectionClose(int id, Callback cb) {
+        ThreadUtils.runOnExecutor(() -> {
+            peerConnectionCloseAsync(id);
+
+            // Signal we're done
+            cb.invoke();
+        });
     }
 
     private void peerConnectionCloseAsync(int id) {
@@ -1228,7 +1233,7 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
                 callback.invoke(false, "invalid trackId and type");
                 return;
             }
-            
+
             WritableMap res = Arguments.createMap();
             res.putString("id", transceiverId);
             res.putMap("state", this.serializeState(id));
